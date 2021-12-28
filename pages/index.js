@@ -10,7 +10,7 @@ export default function Home({courses}) {
   return (
     <>
       <Hero />
-      <CourseList />
+      <CourseList courses={courses} />
     </>
   )
 }
