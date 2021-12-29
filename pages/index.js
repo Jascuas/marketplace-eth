@@ -1,14 +1,17 @@
 
-import { Hero, Breadcrumbs } from "@components/common"
-import { CourseList } from "@components/course"
-import { BaseLayout } from "@components/layout"
-import { OrderCard } from "@components/order"
-import { EthRates, WalletBar } from "@components/web3"
+import { Hero } from "@components/ui/common"
+import { CourseList } from "@components/ui/course"
+import { BaseLayout } from "@components/ui/layout"
 import { getAllCourses } from "@content/courses/fetcher"
+import { useWeb3 } from "@components/providers"
 
 export default function Home({courses}) {
+  const { web3Api: { isLoading, web3 }}  = useWeb3()
+  console.log(isLoading)
+  console.log(web3)
   return (
     <>
+{ isLoading ? "Is Loading Web3..." : web3 ? "Web 3 Ready!" : "Please install metamask" }
       <Hero />
       <CourseList courses={courses} />
     </>
