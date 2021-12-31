@@ -2,11 +2,15 @@
 import { useWeb3 } from "@components/providers";
 import Link from "next/link";
 import { Button } from "@components/ui/common";
+import { useAccount } from "@components/web3/hooks/useAccount";
 
 export default function Footer() {
 
   const { connect, isLoading, isWeb3Loaded } = useWeb3();
+  const { account } = useAccount()
+
   return (
+
     <section>
       <div className="relative pt-6 px-4 sm:px-6 lg:px-8">
         <nav className="relative" aria-label="Global">
@@ -31,7 +35,10 @@ export default function Footer() {
                   disabled={true}
                   onClick={connect}>
                   Loading...
-                </Button> : isWeb3Loaded ?
+                </Button> : isWeb3Loaded ? account.data ?
+                  <Button className="pointer-events-none" variant="red">
+                    Hello {account.isAdmin && "Admin"} 
+                  </Button> :
                   <Button
                     onClick={connect}>
                     Connect
@@ -45,6 +52,14 @@ export default function Footer() {
           </div>
         </nav>
       </div>
+      {account.data &&
+        <div className="flex justify-end pt-1 sm:px-6 lg:px-8">
+          <div className="text-white bg-indigo-600 rounded-md p-2">
+            {account.data.substring(0, 6)}...
+          </div>
+        </div>
+      }
+
     </section>
   )
 }
