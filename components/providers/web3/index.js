@@ -49,7 +49,9 @@ export default function Web3Provider({ children }) {
                     try {
                         await provider.request({ method: "eth_requestAccounts" })
                     } catch {
-                        location.reload()
+                        //location.reload()
+                        console.log("nope")
+
                     }
                 } :
                 () => console.error("Cannot connect to Metamask, try to reload your browser please.")

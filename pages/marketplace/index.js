@@ -1,10 +1,10 @@
 
-import { CourseList } from "@components/ui/course"
+import { CourseList, CourseCard } from "@components/ui/course"
 import { BaseLayout } from "@components/ui/layout"
 import { getAllCourses } from "@content/courses/fetcher"
 import { WalletBar } from "@components/ui/web3"
-import { useAccount } from "@components/hooks/web3/useAccount"
-import { useNetwork } from "@components/hooks/web3/useNetwork"
+import { useAccount, useNetwork } from "@components/hooks/web3"
+
 
 export default function Marketplace({ courses }) {
     const { account } = useAccount()
@@ -12,8 +12,12 @@ export default function Marketplace({ courses }) {
 
     return (
         <>
-            <WalletBar address={account.data} networkName={network.data} />
-            <CourseList courses={courses} />
+            <WalletBar address={account.data} network={{ data: network.data, target: network.target, isSupported: network.isSupported }} />
+            <CourseList courses={courses}>
+                {
+                    course => <CourseCard key={course.id} course={course} />
+                }
+            </CourseList>
         </>
     )
 }

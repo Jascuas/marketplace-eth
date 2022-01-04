@@ -8,11 +8,17 @@ const adminAddresses = {
 }
 
 export const handler = (web3, provider) => () => {
+
     const { data, mutate, ...rest } = useSWR(() =>
         web3 ? "web3/accounts" : null,
         async () => {
-            const accounts = await provider.request({ method: 'eth_requestAccounts' })
+            const accounts = [null]
+            if(provider.selectedAddress) {
+               accounts = await provider.request({ method: 'eth_requestAccounts' })
+            }
+             
             return accounts[0]
+            
         }
     )
 

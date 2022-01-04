@@ -1,6 +1,6 @@
 
 
-export default function WalletBar({address, networkName}) {
+export default function WalletBar({ address, network }) {
 
   return (
 
@@ -17,7 +17,23 @@ export default function WalletBar({address, networkName}) {
             </div>
           </div>
           <div>
-            <div><span>Currently on </span><strong className="text-2xl">{networkName}</strong></div>
+            {network.isSupported ?
+            network.data &&
+              <div>
+                <span>Currently on </span>
+                <strong className="text-2xl">{network.data}</strong>
+              </div> :
+              network.data &&
+              <div className="bg-red-400 p-4 rounded-lg">
+                <div>Connected to wrong Network</div>
+                <span>Currently on </span>
+                <strong >{network.data}</strong>
+                <div>
+                  Connect to: 
+                  <strong className="text-2xl"> {network.target}</strong>
+                </div>
+              </div>
+            }
           </div>
         </div>
       </div>
