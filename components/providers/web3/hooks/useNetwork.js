@@ -27,13 +27,11 @@ export const handler = (web3, provider) => () => {
     }, [provider])
 
     return {
-        network: {
-            data,
-            mutate,
-            target: targetNetwork,
-            isSupported: data === targetNetwork,
-            ...rest
-        }
+        data,
+        mutate,
+        target: targetNetwork,
+        isSupported: data === targetNetwork,
+        ...rest
     }
 }
 

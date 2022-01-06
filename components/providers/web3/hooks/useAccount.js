@@ -13,12 +13,12 @@ export const handler = (web3, provider) => () => {
         web3 ? "web3/accounts" : null,
         async () => {
             const accounts = [null]
-            if(provider.selectedAddress) {
-               accounts = await provider.request({ method: 'eth_requestAccounts' })
+            if (provider.selectedAddress) {
+                accounts = await provider.request({ method: 'eth_requestAccounts' })
             }
-             
+
             return accounts[0]
-            
+
         }
     )
 
@@ -26,14 +26,11 @@ export const handler = (web3, provider) => () => {
         provider && provider.on("accountsChanged", accounts => mutate(accounts[0] ?? null))
     }, [provider])
 
-    
+
     return {
-        account:
-        {
-            data,
-            isAdmin: (data && adminAddresses[web3.utils.keccak256(data)]) ?? false,
-            mutate,
-            ...rest
-        }
+        data,
+        isAdmin: (data && adminAddresses[web3.utils.keccak256(data)]) ?? false,
+        mutate,
+        ...rest
     }
 }
