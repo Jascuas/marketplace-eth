@@ -4,6 +4,8 @@ import { BaseLayout } from "@components/ui/layout"
 import { getAllCourses } from "@content/courses/fetcher"
 import { WalletBar } from "@components/ui/web3"
 import { useAccount, useNetwork } from "@components/hooks/web3"
+import { Button } from "@components/ui/common"
+import { OrderModal } from "@components/ui/order"
 
 
 export default function Marketplace({ courses }) {
@@ -15,9 +17,16 @@ export default function Marketplace({ courses }) {
             <WalletBar address={account.data} network={{ data: network.data, target: network.target, isSupported: network.isSupported }} />
             <CourseList courses={courses}>
                 {
-                    course => <CourseCard key={course.id} course={course} />
+                    course =>
+                        <CourseCard
+                            key={course.id}
+                            course={course}
+                            Footer={ () => 
+                                <div><Button variant="lightPurple">Purchase</Button></div>
+                            } />
                 }
             </CourseList>
+            <OrderModal />
         </>
     )
 }
