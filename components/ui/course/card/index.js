@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Card({ course, Footer }) {
+export default function Card({ course, disabled, Footer }) {
     return (
         <div
             key={course.id}
@@ -10,7 +10,7 @@ export default function Card({ course, Footer }) {
             <div className="flex h-full">
                 <div className="flex-1 h-full next-image-wrapper">
                     <Image
-                        className="object-cover"
+                        className={`object-cover ${disabled && "filter grayscale"}`}
                         layout="responsive"
                         width="100%"
                         height="100%"
