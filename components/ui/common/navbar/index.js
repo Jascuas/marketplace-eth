@@ -37,7 +37,7 @@ export default function Navbar() {
                   onClick={connect}>
                   Loading...
                 </Button> : account.data ?
-                  <Button className="pointer-events-none" variant="red">
+                  <Button className="pointer-events-none" >
                     Hello {account.isAdmin && "Admin"}
                   </Button> : requireInstall ?
                     <Button

@@ -13,7 +13,7 @@ export default function EthRates() {
       <div className="flex flex-1 items-stretch text-center">
         <div className="p-10 border drop-shadow rounded-md">
           <div className="flex items-center justify-center">
-            {eth.isValidating ?
+            {!eth.data ?
               <Loader size="sm" /> :
               <>
                 <Image
@@ -34,7 +34,7 @@ export default function EthRates() {
       <div className="flex flex-1 items-stretch text-center">
         <div className="p-10 border drop-shadow rounded-md">
           <div className="flex items-center justify-center">
-            {eth.isValidating ?
+            {!eth.data ?
               <Loader size="sm" /> :
               <>
                 <span className="text-2xl font-bold">{eth.perItem}</span>
