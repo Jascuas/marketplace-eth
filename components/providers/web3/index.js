@@ -13,7 +13,7 @@ export default function Web3Provider({ children }) {
         web3: null,
         contract: null,
         isLoading: true,
-        hooks: setupHooks()
+        hooks: setupHooks({web3: null, provider: null, contract: null})
     });
     useEffect(() => {
         const loadProvider = async () => {
@@ -28,7 +28,7 @@ export default function Web3Provider({ children }) {
                     provider,
                     contract,
                     isLoading: false,
-                    hooks: setupHooks(web3, provider)
+                    hooks: setupHooks({web3, provider, contract})
                 })
                 // console.log(web3.provider)
                 // console.log(provider.selectedAddress)
