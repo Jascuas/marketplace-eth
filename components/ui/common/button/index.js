@@ -10,6 +10,7 @@ export default function Button({
         white: `text-black bg-white`,
         purple: "text-white bg-indigo-600 hover:bg-indigo-700",
         red: "text-white bg-red-600 hover:bg-red-700",
+        green: "text-white bg-green-600 hover:bg-green-700",
         lightPurple: "text-indigo-700 bg-indigo-100 hover:bg-indigo-200",
     }
     return (

@@ -33,7 +33,7 @@ const VerificationInput = ({ onVerify }) => {
 
 export default function ManagedCourses() {
     const [proofOwnership, setProofWnership] = useState({})
-    const { web3 } = useWeb3()
+    const { web3, contract } = useWeb3()
     const { account } = useAdmin({ redirectTo: "/marketplace" })
     const { managedCourses } = useManagedCourses(account)
 
@@ -45,6 +45,14 @@ export default function ManagedCourses() {
         )
 
         setProofWnership({ ...proofOwnership, [hash]: proofToCheck === proof })
+    }
+
+    const activateCourse = async courseHash => {
+        try {
+            await contract.methods.activateCourse(courseHash).send({from: account.data})
+        } catch (error) {   
+            console.log(error.message)
+        }
     }
 
     if (!account.isAdmin) {
@@ -79,6 +87,16 @@ export default function ManagedCourses() {
                             <div className="mt-2">
                                 <Message type="danger">Wrong proof!</Message>
                             </div>
+                        }
+                        { course.state === "purchased" &&
+                        <div className="mt-2">
+                            <Button variant="green" className="mr-2" onClick={() => activateCourse(course.hash)}>
+                                Activate
+                            </Button>
+                            <Button variant="red">
+                                Deactivate
+                            </Button>
+                        </div>
                         }
                     </ManagedCourseCard>
                 )}
