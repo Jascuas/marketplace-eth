@@ -47,12 +47,20 @@ export default function ManagedCourses() {
         setProofWnership({ ...proofOwnership, [hash]: proofToCheck === proof })
     }
 
-    const activateCourse = async courseHash => {
+    const changeCourseState = async (courseHash, method) => {
         try {
-            await contract.methods.activateCourse(courseHash).send({from: account.data})
+            await contract.methods[method](courseHash).send({from: account.data})
         } catch (error) {   
             console.log(error.message)
         }
+    }
+
+    const activateCourse = async courseHash => {
+        changeCourseState(courseHash, "activateCourse")
+    }
+
+    const deactivateCourse = async courseHash => {
+        changeCourseState(courseHash, "deactivateCourse")
     }
 
     if (!account.isAdmin) {
@@ -93,7 +101,7 @@ export default function ManagedCourses() {
                             <Button variant="green" className="mr-2" onClick={() => activateCourse(course.hash)}>
                                 Activate
                             </Button>
-                            <Button variant="red">
+                            <Button variant="red" onClick={() => deactivateCourse(course.hash)}>
                                 Deactivate
                             </Button>
                         </div>
