@@ -2,7 +2,16 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Card({ course, disabled, Footer }) {
+const STATE_COLORS = {
+    purchased: "indigo",
+    activated: "green",
+    deactivated: "red"
+}
+
+export default function Card({ course, disabled, Footer, state }) {
+
+    const stateColor = STATE_COLORS[state]
+
     return (
         <div
             key={course.id}
@@ -18,7 +27,13 @@ export default function Card({ course, disabled, Footer }) {
                         alt={course.title} />
                 </div>
                 <div className="p-3 xs:pb-4  flex-2 items-center">
-                    <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{course.type}</div>
+                    <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold ">{course.type}
+                        {state &&
+                            <span className={`text-xs text-${stateColor}-700 bg-${stateColor}-200 rounded-full  p-2 ml-2 `}>
+                                {state}
+                            </span>
+                        }
+                    </div>
                     <Link href={`/courses/${course.slug}`}>
                         <a className="h-12 block mt-1 text-sm sm:text-lg leading-tight font-medium text-black hover:underline">{course.title}</a>
                     </Link>

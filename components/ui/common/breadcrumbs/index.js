@@ -17,7 +17,7 @@ export default function Breadcrumbs({items, isAdmin}) {
     <nav aria-label="breadcrumb" className=" flex xs:justify-end justify-center py-4 px-0 sm:px-6 lg:px-8">
       <ol className="flex leading-none text-indigo-600 divide-x divide-indigo-400">
         { items.map((item, i) =>
-          <React.Fragment key={item.index}>
+          <React.Fragment key={i}>
             { !item.requireAdmin &&
               <BreadcrumbItem
                 item={item}

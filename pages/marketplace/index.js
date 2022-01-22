@@ -41,85 +41,89 @@ export default function Marketplace({ courses }) {
         }
     }
 
+
+
     return (
         <>
             <MarketHeader />
             <CourseList courses={courses}>
                 {
-                    course =>
-                        <CourseCard
-                            key={course.id}
-                            course={course}
-                            disabled={!hasConnectedWallet}
-                            Footer={() => {
+                    course => {
+                        const owned = ownedCourses.lookup[course.id]
 
-                                if (requireInstall) {
+                        return (
+                            <CourseCard
+                                key={course.id}
+                                course={course}
+                                state={owned?.state}
+                                disabled={!hasConnectedWallet}
+                                Footer={() => {
+                                    if (requireInstall) {
+                                        return (
+                                            <Button
+                                                disabled={true}
+                                                variant="lightPurple">
+                                                Install
+                                            </Button>
+                                        )
+                                    }
+
+                                    if (isConnecting) {
+                                        return (
+                                            <Button
+                                                disabled={true}
+                                                variant="lightPurple">
+                                                <Loader size="sm" />
+                                            </Button>
+                                        )
+                                    }
+
+                                    if (!ownedCourses.hasInitialResponse) {
+                                        return (
+                                            <div style={{ height: "50px" }}></div>
+                                        )
+                                    }
+
+
+
+                                    if (owned) {
+                                        return (
+                                            <>
+                                                <div>
+                                                    <Button
+                                                        disabled={false}
+                                                        variant="green"
+                                                        className="mb-2 mr-2">
+                                                        <a href={`/courses/${course.slug}`}>Watch</a>
+                                                    </Button>
+                                                    {owned.state === "deactivated" &&
+                                                        <Button
+                                                            disabled={false}
+
+                                                            variant="purple"
+                                                            className="mb-2">
+                                                            Fund to Activate
+                                                        </Button>
+                                                    }
+                                                </div>
+                                            </>
+                                        )
+                                    }
+
                                     return (
                                         <Button
-                                            disabled={true}
+                                            onClick={() => setSelectedCourse(course)}
+                                            disabled={!hasConnectedWallet}
                                             variant="lightPurple">
-                                            Install
+                                            Purchase
                                         </Button>
                                     )
                                 }
-
-                                if (isConnecting) {
-                                    return (
-                                        <Button
-                                            disabled={true}
-                                            variant="lightPurple">
-                                            <Loader size="sm" />
-                                        </Button>
-                                    )
                                 }
+                            />
+                        )
+                    }
 
-                                if (!ownedCourses.hasInitialResponse) {
-                                    return (
-                                        <div style={{ height: "50px" }}></div>
-                                    )
-                                }
-
-                                const owned = ownedCourses.lookup[course.id]
-
-                                if (owned) {
-                                  return (
-                                      <>
-                                    <Button
-                                      disabled={true}
-                                      variant="green"
-                                      className="mb-2">
-                                      Owned
-                                    </Button>
-                                    { owned.state === "activated" &&
-                                        <Message size="sm">
-                                            Activated
-                                        </Message>
-                                    }
-                                    { owned.state === "deactivated" &&
-                                        <Message type="danger" size="sm" >
-                                            Deactivated
-                                        </Message>
-                                    }
-                                    { owned.state === "purchased" &&
-                                        <Message type="warning" size="sm">
-                                            Waiting for activation
-                                        </Message>
-                                    }
-                                    </>
-                                  )
-                                }
-
-                                return (
-                                    <Button
-                                        onClick={() => setSelectedCourse(course)}
-                                        disabled={!hasConnectedWallet}
-                                        variant="lightPurple">
-                                        Purchase
-                                    </Button>
-                                )
-                            }
-                            }
-                        />
                 }
             </CourseList>
             {selectedCourse &&
