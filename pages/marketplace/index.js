@@ -12,9 +12,11 @@ import { useWeb3 } from "@components/providers"
 
 export default function Marketplace({ courses }) {
     const { web3, contract, requireInstall } = useWeb3();
-    const [selectedCourse, setSelectedCourse] = useState(null);
     const { hasConnectedWallet, isConnecting, account } = useWalletInfo()
     const { ownedCourses } = useOwnedCourses(courses, account.data)
+
+    const [selectedCourse, setSelectedCourse] = useState(null)
+    const [isNewPurchase, setIsNewPurchase] = useState(true)
 
     const purchaseCourse = async order => {
         const hexCourseId = web3.utils.utf8ToHex(selectedCourse.id)
@@ -24,119 +26,148 @@ export default function Marketplace({ courses }) {
             { type: "address", value: account.data }
         )
 
-        const emailHash = web3.utils.sha3(order.email)
-
-        const proof = web3.utils.soliditySha3(
-            { type: "bytes32", value: emailHash },
-            { type: "bytes32", value: orderHash }
-        )
-
         const value = web3.utils.toWei(String(order.price))
-        try {
-            await contract.methods.purchaseCourse(
-                hexCourseId, proof
-            ).send({ from: account.data, value })
-        } catch {
-            console.error("Purchase course: Operation failed.")
+
+        if (isNewPurchase) {
+            const emailHash = web3.utils.sha3(order.email)
+            const proof = web3.utils.soliditySha3(
+                { type: "bytes32", value: emailHash },
+                { type: "bytes32", value: orderHash }
+            )
+
+            _purchaseCourse(hexCourseId, proof, value)
+        } else {
+            _repurchaseCourse(orderHash, value)
         }
     }
 
+const _purchaseCourse = async (hexCourseId, proof, value) => {
+    try {
+        const result = await contract.methods.purchaseCourse(
+            hexCourseId,
+            proof
+        ).send({ from: account.data, value })
+        console.log(result)
+    } catch {
+        console.error("Purchase course: Operation has failed.")
+    }
+}
 
+const _repurchaseCourse = async (courseHash, value) => {
+    try {
+        const result = await contract.methods.repurchaseCourse(
+            courseHash
+        ).send({ from: account.data, value })
+        console.log(result)
+    } catch {
+        console.error("Purchase course: Operation has failed.")
+    }
+}
 
-    return (
-        <>
-            <MarketHeader />
-            <CourseList courses={courses}>
-                {
-                    course => {
-                        const owned = ownedCourses.lookup[course.id]
+return (
+    <>
+        <MarketHeader />
+        <CourseList courses={courses}>
+            {
+                course => {
+                    const owned = ownedCourses.lookup[course.id]
 
-                        return (
-                            <CourseCard
-                                key={course.id}
-                                course={course}
-                                state={owned?.state}
-                                disabled={!hasConnectedWallet}
-                                Footer={() => {
-                                    if (requireInstall) {
-                                        return (
-                                            <Button
-                                                size="sm"
-                                                disabled={true}
-                                                variant="lightPurple">
-                                                Install
-                                            </Button>
-                                        )
-                                    }
-
-                                    if (isConnecting) {
-                                        return (
-                                            <Button
-                                                size="sm"
-                                                disabled={true}
-                                                variant="lightPurple">
-                                                <Loader size="sm" />
-                                            </Button>
-                                        )
-                                    }
-
-                                    if (!ownedCourses.hasInitialResponse) {
-                                        return (
-                                            <div style={{ height: "42px" }}></div>
-                                        )
-                                    }
-
-
-
-                                    if (owned) {
-                                        return (
-                                            <>
-                                                <div>
-                                                    <Button
-                                                        size="sm"
-                                                        disabled={false}
-                                                        variant="lightGreen"
-                                                        className="mb-2 mr-2">
-                                                        <a href={`/courses/${course.slug}`}>Watch</a>
-                                                    </Button>
-                                                    {owned.state === "deactivated" &&
-                                                        <Button
-                                                            size="sm"
-                                                            disabled={false}
-
-                                                            variant="purple"
-                                                            className="mb-2">
-                                                            Fund to Activate
-                                                        </Button>
-                                                    }
-                                                </div>
-                                            </>
-                                        )
-                                    }
-
+                    return (
+                        <CourseCard
+                            key={course.id}
+                            course={course}
+                            state={owned?.state}
+                            disabled={!hasConnectedWallet}
+                            Footer={() => {
+                                if (requireInstall) {
                                     return (
                                         <Button
                                             size="sm"
-                                            onClick={() => setSelectedCourse(course)}
-                                            disabled={!hasConnectedWallet}
+                                            disabled={true}
                                             variant="lightPurple">
-                                            Purchase
+                                            Install
                                         </Button>
                                     )
                                 }
+
+                                if (isConnecting) {
+                                    return (
+                                        <Button
+                                            size="sm"
+                                            disabled={true}
+                                            variant="lightPurple">
+                                            <Loader size="sm" />
+                                        </Button>
+                                    )
                                 }
-                            />
-                        )
-                    }
 
+                                if (!ownedCourses.hasInitialResponse) {
+                                    return (
+                                        <div style={{ height: "42px" }}></div>
+                                    )
+                                }
+
+
+
+                                if (owned) {
+                                    return (
+                                        <>
+                                            <div>
+                                                <Button
+                                                    size="sm"
+                                                    disabled={false}
+                                                    variant="lightGreen"
+                                                    className="mb-2 mr-2">
+                                                    <a href={`/courses/${course.slug}`}>Watch</a>
+                                                </Button>
+                                                {owned.state === "deactivated" &&
+                                                    <Button
+                                                        size="sm"
+                                                        disabled={false}
+                                                        onClick={() => {
+                                                            setIsNewPurchase(false)
+                                                            setSelectedCourse(course)
+                                                        }}
+                                                        variant="purple"
+                                                        className="mb-2">
+                                                        Fund to Activate
+                                                    </Button>
+                                                }
+                                            </div>
+                                        </>
+                                    )
+                                }
+
+                                return (
+                                    <Button
+                                        size="sm"
+                                        onClick={() => setSelectedCourse(course)}
+                                        disabled={!hasConnectedWallet}
+                                        variant="lightPurple">
+                                        Purchase
+                                    </Button>
+                                )
+                            }
+                            }
+                        />
+                    )
                 }
-            </CourseList>
-            {selectedCourse &&
-                <OrderModal onSubmit={purchaseCourse} course={selectedCourse} onClose={() => setSelectedCourse(null)} />
-            }
 
-        </>
-    )
+            }
+        </CourseList>
+        {selectedCourse &&
+            <OrderModal
+                onSubmit={purchaseCourse}
+                isNewPurchase={isNewPurchase}
+                course={selectedCourse}
+                onClose={() => {
+                    setSelectedCourse(null)
+                    setIsNewPurchase(true)
+                }} />
+        }
+
+    </>
+)
 }
 
 export function getStaticProps() {
