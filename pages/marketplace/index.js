@@ -61,6 +61,7 @@ export default function Marketplace({ courses }) {
                                     if (requireInstall) {
                                         return (
                                             <Button
+                                                size="sm"
                                                 disabled={true}
                                                 variant="lightPurple">
                                                 Install
@@ -71,6 +72,7 @@ export default function Marketplace({ courses }) {
                                     if (isConnecting) {
                                         return (
                                             <Button
+                                                size="sm"
                                                 disabled={true}
                                                 variant="lightPurple">
                                                 <Loader size="sm" />
@@ -80,7 +82,7 @@ export default function Marketplace({ courses }) {
 
                                     if (!ownedCourses.hasInitialResponse) {
                                         return (
-                                            <div style={{ height: "50px" }}></div>
+                                            <div style={{ height: "42px" }}></div>
                                         )
                                     }
 
@@ -91,13 +93,15 @@ export default function Marketplace({ courses }) {
                                             <>
                                                 <div>
                                                     <Button
+                                                        size="sm"
                                                         disabled={false}
-                                                        variant="green"
+                                                        variant="lightGreen"
                                                         className="mb-2 mr-2">
                                                         <a href={`/courses/${course.slug}`}>Watch</a>
                                                     </Button>
                                                     {owned.state === "deactivated" &&
                                                         <Button
+                                                            size="sm"
                                                             disabled={false}
 
                                                             variant="purple"
@@ -112,6 +116,7 @@ export default function Marketplace({ courses }) {
 
                                     return (
                                         <Button
+                                            size="sm"
                                             onClick={() => setSelectedCourse(course)}
                                             disabled={!hasConnectedWallet}
                                             variant="lightPurple">
