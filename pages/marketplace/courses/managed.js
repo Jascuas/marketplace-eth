@@ -35,12 +35,15 @@ const VerificationInput = ({ onVerify }) => {
 export default function ManagedCourses() {
     const [proofOwnership, setProofWnership] = useState({})
     const [searchedCourse, setSearchedCourse] = useState(null)
-    const [filters, setFilters] = useState({state: "all"})
+    const [filters, setFilters] = useState({ state: "all" })
     const { web3, contract } = useWeb3()
     const { account } = useAdmin({ redirectTo: "/marketplace" })
     const { managedCourses } = useManagedCourses(account)
 
     const verifyCourse = (email, { hash, proof }) => {
+        if (!email) {
+            return
+        }
         const emailHash = web3.utils.sha3(email)
         const proofToCheck = web3.utils.soliditySha3(
             { type: "bytes32", value: emailHash },
@@ -134,7 +137,7 @@ export default function ManagedCourses() {
     }
 
     const filteredCourses = managedCourses.data?.filter((course) => {
-        if(filters.state === "all") return true
+        if (filters.state === "all") return true
         return course.state === filters.state
     }).map(course => renderCard(course))
 
@@ -142,9 +145,9 @@ export default function ManagedCourses() {
     return (
         <>
             <MarketHeader />
-            <CourseFilter 
-            onFilterSelected={(value) => setFilters({state: value})}
-            onSearchSubmit={searchCourse}
+            <CourseFilter
+                onFilterSelected={(value) => setFilters({ state: value })}
+                onSearchSubmit={searchCourse}
             />
             <section className="grid grid-cols-1">
                 {searchedCourse &&
@@ -154,8 +157,8 @@ export default function ManagedCourses() {
                     </div>
                 }
                 <h1 className="text-2xl font-bold p-5">All Courses</h1>
-                { filteredCourses }
-                { filteredCourses?.length === 0 &&
+                {filteredCourses}
+                {filteredCourses?.length === 0 &&
                     <Message type="waning">
                         No courses to display
                     </Message>
