@@ -16,6 +16,7 @@
     "web3": "^1.6.1"
   },
   "devDependencies": {
+    "@truffle/hdwallet-provider": "^2.0.1",
     "autoprefixer": "^10.4.0",
     "eslint": "8.5.0",
     "eslint-config-next": "12.0.7",
