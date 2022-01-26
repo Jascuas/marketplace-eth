@@ -14,7 +14,7 @@ module.exports = {
       provider: () =>
         new HDWalletProvider({
           mnemonic: {
-            phrase: ""
+            phrase: keys.MNEMONIC
           },
           providerOrUrl: `https://ropsten.infura.io/v3/${keys.INFURA_PROJECT_ID}`,
           addressIndex: 0
@@ -36,3 +36,10 @@ module.exports = {
 
 
 // 5500000 * 20000000000 = 110000000000000000 = 0,11 ETH => 334 USD
+
+//  hash:    0x4faf05f18725afb8853a5fcdf7bb02c97255e8b3be676ecded2d45837a51ecd9
+
+// address:    0x40a9A792624B125C63439e8a8B129352BCc46E55
+
+// NEXT_PUBLIC_TARGET_CHAIN_ID=1337
+// NEXT_PUBLIC_NETWORK_ID=5777
