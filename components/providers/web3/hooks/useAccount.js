@@ -5,7 +5,7 @@ import useSWR from "swr"
 
 const adminAddresses = {
     "0xe731dc2bf4ac4db84316c2501716961b92a1ced229e9f749cb6b4ffbb5385ff3": true,
-    "0x769f144406cc79e577194a10869a550a35c70712fae41e20518af9e41e4a34db": true
+    "0x1e34a683e5913d623669430d7b766c26beaff4d577858824b19b8c2607877fa5": true
 }
 
 export const handler = (web3, provider) => () => {
@@ -14,10 +14,14 @@ export const handler = (web3, provider) => () => {
         web3 ? "web3/accounts" : null,
         async () => {
             const accounts = [null]
-            if (provider.selectedAddress) accounts = await provider.request({ method: 'eth_requestAccounts' })
+            if (provider.selectedAddress){
+                accounts = await provider.request({ method: 'eth_requestAccounts' })
+            } 
             
-            if(!accounts[0]) throw new Error("Cannot retrive an account. Please try again")
-
+            if(!accounts[0]){
+                throw new Error("Cannot retrive an account. Please try again")
+            } 
+            
             return accounts[0]
 
         }

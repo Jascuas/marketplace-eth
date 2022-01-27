@@ -9,7 +9,7 @@ const SIZES = {
 export default function Loader({size = "md"}) {
 
     return (
-        <div className={`sk-fading-circle mb-2 ${SIZES[size]}`}>
+        <div className={`sk-fading-circle ${SIZES[size]}`}>
             {Array.from({ length: 12 }).map((_, i) =>
                 <div
                     key={`dot-${i}`}
