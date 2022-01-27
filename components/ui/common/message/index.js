@@ -1,9 +1,15 @@
 import { useState } from "react"
 
-const TYPES = {
-  success: "green",
-  warning: "yellow",
-  danger: "red"
+const BG_CLASSES = {
+  success: "bg-green-100",
+  warning: "bg-yellow-100",
+  danger: "bg-red-100"
+}
+
+const TX_CLASSES = {
+  success: "text-green-900",
+  warning: "text-yellow-900",
+  danger: "text-red-900"
 }
 
 const SIZES = {
@@ -18,15 +24,15 @@ export default function Message({children, type = "success", size = "md"}) {
 
   if (!isDisplayed) { return null }
 
-  const messageType = TYPES[type]
+  const messageType = TX_CLASSES[type]
   const messageSizeClass = SIZES[size]
 
   return (
-    <div className={`bg-${messageType}-200 rounded-xl mb-3 `}>
+    <div className={`${BG_CLASSES[type]} rounded-xl mb-3 `}>
       <div className="max-w-7xl mx-auto py-2 px-1">
         <div className="flex items-center justify-between flex-wrap">
           <div className="w-0 flex-1 flex items-center">
-            <div className={`ml-3 ${messageSizeClass} font-medium text-${messageType}-900 truncate`}>
+            <div className={`ml-3 ${messageSizeClass} font-medium ${messageType} truncate`}>
               <span className="inline">
                 { children }
               </span>
@@ -38,7 +44,7 @@ export default function Message({children, type = "success", size = "md"}) {
               type="button"
               className="-mr-1 flex p-2 rounded-md focus:outline-none focus:ring-2 sm:-mr-2">
               <span className="sr-only">Dismiss</span>
-              <svg className={`h-6 w-6 text-${messageType}-900`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <svg className={`h-6 w-6 ${messageType}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
