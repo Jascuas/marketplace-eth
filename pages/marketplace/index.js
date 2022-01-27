@@ -128,7 +128,10 @@ export default function Marketplace({ courses }) {
                                                 size="sm"
                                                 disabled={true}
                                                 variant="lightPurple">
-                                                <Loader size="sm" />
+                                                {hasConnectedWallet ?
+                                                    <Loader size="sm" /> :
+                                                    "Connect"
+                                                }
                                             </Button>
                                         )
                                     }
