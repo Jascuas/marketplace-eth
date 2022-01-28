@@ -1,8 +1,7 @@
 
 import { useEthPrice } from "@components/hooks/useEthePrice";
 import { Button, Modal } from "@components/ui/common";
-import { useState } from "react";
-import { useEffect } from "react/cjs/react.development";
+import { useState, useEffect } from "react";
 
 
 const defaultOrder = {
